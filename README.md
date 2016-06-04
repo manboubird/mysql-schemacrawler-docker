@@ -4,16 +4,23 @@ Generate the ER diagram of tables created in mysql 5.6.
 
 # Requirement
 
-docker-compose
-graphviz
+* docker-compose
+* graphviz
+
+# Containers
+
+* mysql 5.6
+* schemacrawler v14.07.07
 
 # Commands (MacOS) 
 
 ```
 docker-compose pull
 docker-compose build
+docker-compose up -d
 
-docker run --name mysqlschemacrawlerdocker_mysql_1 -e MYSQL_ROOT_PASSWORD=mysql -d -p 3306:3306 mysql:5.6
+# independent docker run 
+#docker run --name mysqlschemacrawlerdocker_mysql_1 -e MYSQL_ROOT_PASSWORD=mysql -d -p 3306:3306 mysql:5.6
 
 # create test tables
 mysql -h$(docker-machine ip default) -P3306 -uroot -pmysql < ./create-tables.ddl
@@ -33,9 +40,14 @@ docker run -v $(pwd):/output \
 
 # generate pdf from dot file. use osage to make diagram layout better.
 osage -Tpdf -o database.dot.pdf database.dot
+
+# cleanup containers
+docker-compose stop
+docker-compose rm
 ```
 
 # Reference
 
 [https://hub.docker.com/r/symfoni/schemacrawler/](https://hub.docker.com/r/symfoni/schemacrawler/)
+
 
