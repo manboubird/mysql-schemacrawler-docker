@@ -46,6 +46,32 @@ docker-compose stop
 docker-compose rm
 ```
 
+## Postgres
+
+```
+# virtualbox gateway IP (host machine db)
+TARGET_DB_IP="10.0.2.2" 
+
+# generate a dot file
+docker run -v $(pwd):/output \
+  --add-host="db:${TARGET_DB_IP}" \
+  --rm mysqlschemacrawlerdocker_schemacrawler \
+  -server=postgresql \
+  -port=5432 \
+  -database=postgres \
+  -host=db \
+  -user=user \
+  -password= \
+  -infolevel=maximum \
+  -loglevel=CONFIG \
+  -command=graph \
+  --outputformat=dot \
+  --outputfile=/output/database.dot
+
+# generate pdf from dot file. use osage to make diagram layout better.
+osage -Tpdf -o database.dot.pdf database.dot
+```
+
 # Reference
 
 [https://hub.docker.com/r/symfoni/schemacrawler/](https://hub.docker.com/r/symfoni/schemacrawler/)
